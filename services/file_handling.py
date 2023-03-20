@@ -30,4 +30,4 @@ def prepare_book(path: str) -> None:
         
 
 
-# prepare_book(BOOK_PATH)
+prepare_book(BOOK_PATH)
