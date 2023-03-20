@@ -89,6 +89,25 @@ async def page_callback(callback: CallbackQuery):
     await callback.answer(text='Страница добавлена в закладки')
 
 
+@router.callback_query(IsDigitCallbackData())
+async def process_bookmark_press(callback: CallbackQuery):
+    text = book[int(callback.data)]
+    users_db[callback.from_user.id]['page'] = int(callback.data)
+    await callback.message.edit_text(
+                text=text,
+                reply_markup=create_pagination_keyboard(
+                    'backward',
+                    f'{users_db[callback.from_user.id]["page"]}/{len(book)}',
+                    'forward'))
+    await callback.answer()
 
+
+@router.callback_query(Text(text='edit_bookmarks'))
+async def process_edit_press(callback: CallbackQuery):
+    await callback.message.edit_text(
+                text=LEXICON[callback.data],
+                reply_markup=create_edit_keyboard(
+                                *users_db[callback.from_user.id]["bookmarks"]))
+    await callback.answer()
         
 
