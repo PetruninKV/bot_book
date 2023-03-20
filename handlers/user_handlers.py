@@ -14,10 +14,25 @@ from services.file_handling import book
 router: Router = Router()
 
 
-@router.message(CommandStart)
+@router.message(CommandStart())
 async def start_command(message: Message):
     await message.answer(text=LEXICON['/start'])
     if message.from_user.id not in users_db:
         users_db[message.from_user.id] = deepcopy(user_dict_template)
 
 
+@router.message(Command(commands='help'))
+async def help_command(message: Message):
+    await message.answer(text=LEXICON['/help'])
+
+
+@router.message(Command(commands='beginning'))
+async def beginning_command(message: Message):
+    users_db[message.from_user.id]['page'] = 1
+    text = book[users_db[message.from_user.id]['page']]
+    await message.answer(text=text, 
+                         reply_markup=create_pagination_keyboard( 
+                                                    'backward',
+                                                    f'{users_db[message.from_user.id]["page"]}/{len(book)}',
+                                                    'forward'))
+    
