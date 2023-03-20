@@ -55,3 +55,32 @@ async def bookmarks_command(message: Message):
             reply_markup=create_bookmarks_keyboard(*users_db[message.from_user.id]['bookmarks']))
     else:
         await message.answer(text=LEXICON['no_bookmarks'])
+
+
+@router.callback_query(Text(text='forward'))
+async def forward_callback(callback: CallbackQuery):
+    if users_db[callback.from_user.id]['page'] < len(book):
+        users_db[callback.from_user.id]['page'] += 1
+        text = book[users_db[callback.from_user.id]['page']]
+        await callback.message.edit_text(text=text,
+                                        reply_markup=create_pagination_keyboard( 
+                                                    'backward',
+                                                    f'{users_db[callback.from_user.id]["page"]}/{len(book)}',
+                                                    'forward'))
+    await callback.answer()
+
+
+@router.callback_query(Text(text='backward'))
+async def backward_callback(callback: CallbackQuery):
+    if users_db[callback.from_user.id]['page'] > 1:
+        users_db[callback.from_user.id]['page'] -= 1
+        text = book[users_db[callback.from_user.id]['page']]
+        await callback.message.edit_text(text=text,
+                                         reply_markup=create_pagination_keyboard( 
+                                                    'backward',
+                                                    f'{users_db[callback.from_user.id]["page"]}/{len(book)}',
+                                                    'forward'))
+    await callback.answer()
+
+        
+
