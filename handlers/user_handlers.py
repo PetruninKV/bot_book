@@ -47,3 +47,11 @@ async def continue_message(message: Message):
                                                     'forward'))
     
 
+@router.message(Command(commands='bookmarks'))
+async def bookmarks_command(message: Message):
+    if users_db[message.from_user.id]['bookmarks']:
+        await message.answer(
+            text=LEXICON['/bookmarks'],
+            reply_markup=create_bookmarks_keyboard(*users_db[message.from_user.id]['bookmarks']))
+    else:
+        await message.answer(text=LEXICON['no_bookmarks'])
