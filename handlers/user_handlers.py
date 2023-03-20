@@ -36,3 +36,14 @@ async def beginning_command(message: Message):
                                                     f'{users_db[message.from_user.id]["page"]}/{len(book)}',
                                                     'forward'))
     
+
+@router.message(Command(commands='continue'))
+async def continue_message(message: Message):
+    text = book[users_db[message.from_user.id]['page']]
+    await message.answer(text=text,
+                         reply_markup=create_pagination_keyboard( 
+                                                    'backward',
+                                                    f'{users_db[message.from_user.id]["page"]}/{len(book)}',
+                                                    'forward'))
+    
+
