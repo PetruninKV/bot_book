@@ -82,5 +82,13 @@ async def backward_callback(callback: CallbackQuery):
                                                     'forward'))
     await callback.answer()
 
+
+@router.callback_query(lambda x: '/' in x.data and x.data.replace('/', '').isdigit())
+async def page_callback(callback: CallbackQuery):
+    users_db[callback.from_user.id]['bookmarks'].add(users_db[callback.from_user.id]['page'])
+    await callback.answer(text='Страница добавлена в закладки')
+
+
+
         
 
