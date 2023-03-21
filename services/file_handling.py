@@ -1,8 +1,8 @@
 BOOK_PATH = 'book/book.txt'
-# BOOK_PATH = '../book/book.txt'
 PAGE_SIZE = 1050
 
 book: dict = {}
+
 
 def _get_part_text(text: str, start: int, page_size: int) -> tuple[str, int]:
     max_text = text[start:start + page_size]
@@ -26,9 +26,6 @@ def prepare_book(path: str) -> None:
         while start < finish:
             text_for_dict, len_text = _get_part_text(text, start, page_size)
             book[num_str] = text_for_dict.lstrip()
-            # print(num_str)
-            if num_str == 380:
-                print(book[num_str])
             start += len_text
             num_str += 1
         
